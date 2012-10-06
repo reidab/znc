@@ -37,7 +37,6 @@ version = node['znc']['version']
 
 remote_file "#{Chef::Config[:file_cache_path]}/znc-#{version}.tar.gz" do
   source "#{node['znc']['url']}/znc-#{version}.tar.gz"
-  checksum node['znc']['checksum']
   mode "0644"
   not_if "which znc"
 end
@@ -45,9 +44,10 @@ end
 bash "build znc" do
   cwd Chef::Config[:file_cache_path]
   code <<-EOF
-  tar -zxvf znc-#{version}.tar.gz
-  (cd znc-#{version} && ./configure #{configure_options})
-  (cd znc-#{version} && make && make install)
+  mkdir extract
+  tar -C extract -zxvf znc-#{version}.tar.gz
+  (cd extract/* && ./configure #{configure_options})
+  (cd extract/* && make && make install)
   EOF
   not_if "which znc"
 end
