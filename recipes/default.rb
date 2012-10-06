@@ -33,7 +33,7 @@ directory node['znc']['data_dir'] do
   owner node['znc']['user']
   group node['znc']['group']
 end
-%w[configs moddata/adminlog modules users].each do |dir|
+%w[configs moddata moddata/adminlog modules users].each do |dir|
   directory node['znc']['data_dir'] + "/#{dir}" do
     owner node['znc']['user']
     group node['znc']['group']
