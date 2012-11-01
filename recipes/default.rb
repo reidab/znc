@@ -96,6 +96,7 @@ end
 # render znc.conf
 users = search(:znc_users, '*:*')
 template "#{node['znc']['data_dir']}/configs/znc.conf" do
+  action :create_if_missing
   source "znc.conf.erb"
   mode 0600
   owner node['znc']['user']

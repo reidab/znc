@@ -26,7 +26,9 @@ users.each do |u|
     mode "0755"
   end
 
-  channels = u['channels'].inject([]) do |logged_channels, (k, v)|
+  all_channels = u['channels'] || []
+  all_channels << u['networks'].map{|name, n| n['channels']}
+  channels = all_channels.flatten.inject([]) do |logged_channels, (k, v)|
     logged_channels << k if v.is_a?(Hash) && v['logs2html']
     logged_channels
   end

@@ -6,17 +6,25 @@
 //
 // Source: znc::templates/default/znc.conf.erb
 
-AnonIPLimit  = <%= node['znc']['anon_ip_limit'] %>
-MaxBufferSize= <%= node['znc']['max_buffer_size'] %>
+Version = 0.207
 SSLCertFile  = <%= node['znc']['data_dir'] %>/znc.pem
-Listener4    = <%= node['znc']['port'] %>
-ConnectDelay = <%= node['znc']['connect_delay'] %>
-ServerThrottle = <%= node['znc']['server_throttle'] %>
-Skin         = <%= node['znc']['skin'] %>
-StatusPrefix = <%= node['znc']['status_prefix'] %>
+<Listener 1>
+  Port = <%= node['znc']['port'] %>
+  IPv4 = <%= node['znc']['ipv4'] %>
+  IPv6 = <%= node['znc']['ipv6'] %>
+  SSL  = <%= node['znc']['ssl'] %>
+</Listener>
+
 <% node['znc']['modules'].each do |mod,params| -%>
 LoadModule   = <%= "#{mod} #{params}".strip  %>
 <% end -%>
+
+// AnonIPLimit  = <%= node['znc']['anon_ip_limit'] %>
+// MaxBufferSize= <%= node['znc']['max_buffer_size'] %>
+// ConnectDelay = <%= node['znc']['connect_delay'] %>
+// ServerThrottle = <%= node['znc']['server_throttle'] %>
+// Skin         = <%= node['znc']['skin'] %>
+// StatusPrefix = <%= node['znc']['status_prefix'] %>
 
 <% @users.each do |u| %>
 <User <%= u['id']  %>>
@@ -45,14 +53,30 @@ LoadModule   = <%= "#{mod} #{params}".strip  %>
 
   Allow = *
 
-  <% u['modules'].each do |mod,params| -%>
+  <% (u['modules'] || []).each do |mod,params| -%>
   LoadModule = <%= "#{mod} #{params}".strip  %>
   <% end -%>
 
-  <% u['servers'].each do |server, port| %>
+  <% (u['networks'] || []).each do |name,network| -%>
+  <Network <%= name %>>
+    <% (network['modules'] || []).each do |mod,params| -%>
+    LoadModule = <%= "#{mod} #{params}".strip  %>
+    <% end -%>
+    <% (network['servers'] || []).each do |server, port| %>
+    Server = <%= "#{server} #{port}".strip %>
+    <% end %>
+    <% (network['channels'] || []).each do |chan,options| -%>
+
+    <Chan <%= chan %>>
+    </Chan>
+    <% end -%>
+  </Network>
+  <% end -%>
+
+  <% (u['servers'] || []).each do |server, port| %>
   Server = <%= "#{server} #{port}".strip %>
   <% end %>
-  <% u['channels'].each do |chan,options| -%>
+  <% (u['channels'] || []).each do |chan,options| -%>
 
   <Chan <%= chan %>>
   </Chan>

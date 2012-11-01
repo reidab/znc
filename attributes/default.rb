@@ -32,6 +32,9 @@ default['znc']['server_throttle'] = 30
 default['znc']['status_prefix']   = "*"
 
 default['znc']['port']            = "+7777"
+default['znc']['ssl']             = true
+default['znc']['ipv4']            = true
+default['znc']['ipv6']            = true
 default['znc']['skin']            = "dark-clouds"
 default['znc']['max_buffer_size'] = 500
 default['znc']['modules']         = %w{ webadmin adminlog }
