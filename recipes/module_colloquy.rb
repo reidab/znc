@@ -24,11 +24,14 @@ remote_file "#{node['znc']['data_dir']}/modules/colloquy.cpp" do
   source "https://github.com/wired/colloquypush/raw/master/znc/colloquy.cpp"
   mode "0644"
   not_if {::File.exists?("#{node['znc']['data_dir']}/modules/colloquy.so")}
+  user node['znc']['user']
 end
 
 bash "znc-buildmod colloquy.cpp" do
   cwd "#{node['znc']['data_dir']}/modules"
+  code "znc-buildmod colloquy.cpp"
   creates "#{node['znc']['data_dir']}/modules/colloquy.so"
   notifies :reload, "service[znc]", :immediately
+  user node['znc']['user']
 end
 
