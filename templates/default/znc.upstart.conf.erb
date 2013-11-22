@@ -1,0 +1,15 @@
+description "ZNC IRC Bouncer"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+respawn
+respawn limit 10 5
+
+setuid <%= @user %>
+setgid <%= @group %>
+
+script
+  exec /usr/local/bin/znc --datadir=<%= @data_dir %> -f
+end script
+

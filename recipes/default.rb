@@ -91,6 +91,24 @@ when "init"
     command "pkill -SIGUSR1 znc || true"
     action :run
   end
+when "upstart"
+  template "/etc/init/znc.conf" do
+    source "znc.upstart.conf.erb"
+    owner "root"
+    group "root"
+    mode 0644
+    variables(
+      data_dir: node['znc']['data_dir'],
+      user: node['znc']['user'],
+      group: node['znc']['group']
+    )
+  end
+
+  service "znc" do
+    provider Chef::Provider::Service::Upstart
+    supports :status => true, :restart => true, :reload => true
+    action [ :enable, :start ]
+  end
 end
 
 # render znc.conf
