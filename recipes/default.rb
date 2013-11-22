@@ -88,7 +88,7 @@ when "init"
   # znc doesn't like to be automated...this prevents a race condition
   # http://wiki.znc.in/Configuration#Editing_config
   execute "force-save-znc-config" do
-    command "pkill -SIGUSR1 znc"
+    command "pkill -SIGUSR1 znc || true"
     action :run
   end
 end
