@@ -38,3 +38,5 @@ default['znc']['ipv6']            = true
 default['znc']['skin']            = "dark-clouds"
 default['znc']['max_buffer_size'] = 500
 default['znc']['modules']         = %w{ webadmin adminlog }
+
+default['znc']['extra_conf']      = ""

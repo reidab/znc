@@ -15,6 +15,8 @@ SSLCertFile  = <%= node['znc']['data_dir'] %>/znc.pem
   SSL  = <%= node['znc']['ssl'] %>
 </Listener>
 
+<%= node['znc']['extra_conf'] %>
+
 <% node['znc']['modules'].each do |mod,params| -%>
 LoadModule   = <%= "#{mod} #{params}".strip  %>
 <% end -%>
