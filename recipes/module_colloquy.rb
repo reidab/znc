@@ -21,7 +21,7 @@ include_recipe "znc"
 
 # znc > 0.0.9 required...this means compiling from source on most platforms
 remote_file "#{node['znc']['data_dir']}/modules/colloquy.cpp" do
-  source "https://github.com/wired/colloquypush/raw/master/znc/colloquy.cpp"
+  source node['znc']['module_colloquy_source_url']
   mode "0644"
   not_if {::File.exists?("#{node['znc']['data_dir']}/modules/colloquy.so")}
   user node['znc']['user']
